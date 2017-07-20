@@ -3,11 +3,24 @@ import FotoItem from './FotoItem';
 
 class Timeline extends Component {
 
+    constructor() {
+        super();
+        this.state = {fotos: []};
+    }
+
+    componentDidMount() {
+        fetch('http://localhost:8080/api/public/fotos/rafael')
+            .then(response => response.json())
+            .then(fotos => this.setState({fotos}));
+    }
+
     render() {
         return (
             <div className="fotos container">
-                <FotoItem/>
-                <FotoItem/>
+                {
+                    this.state.fotos
+                        .map(foto => <FotoItem foto={foto}/>)
+                }
             </div>
         );
     }
