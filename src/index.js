@@ -25,6 +25,7 @@ const PrivateRoute = ({component: Component, ...rest}) => (
 ReactDOM.render(
     <Router>
         <Switch>
+            <Route path="/timeline/:login" component={App}/>
             <PrivateRoute path="/timeline" component={App}/>
             <Route path="/logout" component={Logout}/>
             <Route path="/" component={Login}/>
