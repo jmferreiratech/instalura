@@ -15,6 +15,7 @@
     "run-server": "java -jar -Dspring.datasource.password='' instalura.jar"
   },
   "devDependencies": {
+    "pubsub-js": "^1.5.7",
     "react-router-dom": "^4.1.2"
   }
 }
