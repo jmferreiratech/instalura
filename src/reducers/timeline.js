@@ -1,26 +1,46 @@
-export default (state = [], action) => {
-    const fotoAchada = state.find(foto => foto.id === action.fotoId);
+import {List} from "immutable";
+
+export default (state = new List(), action) => {
+    const currentPhoto = state.find(foto => foto.id === action.fotoId);
 
     switch (action.type) {
         case 'LISTAGEM':
-            return action.fotos;
+            return new List(action.fotos);
 
         case 'COMENTARIO':
-            fotoAchada.comentarios.push(action.novoComentario);
-            return state;
+            const comentarios = currentPhoto.comentarios.concat(action.novoComentario);
+            return upToDateState(state, currentPhoto, {comentarios});
 
         case 'LIKE':
-            fotoAchada.likeada = !fotoAchada.likeada;
-
-            const possivelLiker = fotoAchada.likers.find(likerAtual => likerAtual.login === action.liker.login);
-            if (possivelLiker === undefined) {
-                fotoAchada.likers.push(action.liker);
-            } else {
-                fotoAchada.likers = fotoAchada.likers.filter(likerAtual => likerAtual.login !== action.liker.login);
-            }
-            return state;
+            const likeada = !currentPhoto.likeada;
+            const possivelLiker = currentPhoto.likers.find(likerAtual => likerAtual.login === action.liker.login);
+            const likers =
+                (possivelLiker === undefined) ?
+                    currentPhoto.likers.concat(action.liker) :
+                    currentPhoto.likers.filter(likerAtual => likerAtual.login !== action.liker.login);
+            return upToDateState(state, currentPhoto, {likers, likeada});
 
         default:
             return state;
     }
+}
+
+export class Actions {
+    static listing(fotos) {
+        return {type: 'LISTAGEM', fotos};
+    }
+
+    static comment(fotoId, novoComentario) {
+        return {type: 'COMENTARIO', novoComentario, fotoId};
+    }
+
+    static like(fotoId, liker) {
+        return {type: 'LIKE', liker, fotoId};
+    }
+}
+
+function upToDateState(currentState, element, update) {
+    const index = currentState.indexOf(element);
+    return currentState
+        .set(index, Object.assign({}, element, update));
 }

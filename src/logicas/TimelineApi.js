@@ -1,3 +1,5 @@
+import {Actions} from "../reducers/timeline";
+
 class TimelineApi {
 
     static lista(urlPerfil) {
@@ -5,7 +7,7 @@ class TimelineApi {
             fetch(urlPerfil)
                 .then(response => response.json())
                 .then(fotos => {
-                    dispatch({type: 'LISTAGEM', fotos});
+                    dispatch(Actions.listing(fotos));
                     return fotos;
                 });
         }
@@ -30,7 +32,7 @@ class TimelineApi {
                     }
                 })
                 .then(novoComentario => {
-                    dispatch({type: 'COMENTARIO', novoComentario, fotoId});
+                    dispatch(Actions.comment(fotoId, novoComentario));
                     return novoComentario;
                 });
         };
@@ -47,7 +49,7 @@ class TimelineApi {
                     }
                 })
                 .then(liker => {
-                    dispatch({type: 'LIKE', liker, fotoId});
+                    dispatch(Actions.like(fotoId, liker));
                     return liker;
                 });
         };
