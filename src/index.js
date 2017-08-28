@@ -6,8 +6,16 @@ import './css/login.css';
 import App from './App';
 import Login from './components/Login';
 import Logout from './components/Logout';
-import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
+import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
+import {Provider} from "react-redux";
+import {applyMiddleware, combineReducers, createStore} from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import timeline from "./reducers/timeline";
+import header from "./reducers/header";
+
+const reducers = combineReducers({timeline, header});
+const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 const PrivateRoute = ({component: Component, ...rest}) => (
     <Route {...rest} render={props => (
@@ -23,13 +31,15 @@ const PrivateRoute = ({component: Component, ...rest}) => (
 );
 
 ReactDOM.render(
-    <Router>
-        <Switch>
-            <Route path="/timeline/:login" component={App}/>
-            <PrivateRoute path="/timeline" component={App}/>
-            <Route path="/logout" component={Logout}/>
-            <Route path="/" component={Login}/>
-        </Switch>
-    </Router>,
+    <Provider store={store}>
+        <Router>
+            <Switch>
+                <Route path="/timeline/:login" component={App}/>
+                <PrivateRoute path="/timeline" component={App}/>
+                <Route path="/logout" component={Logout}/>
+                <Route path="/" component={Login}/>
+            </Switch>
+        </Router>
+    </Provider>,
     document.getElementById('root'));
 registerServiceWorker();
