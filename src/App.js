@@ -8,8 +8,8 @@ class App extends Component {
         return (
             <div id="root">
                 <div className="main">
-                    <Header store={this.context.store}/>
-                    <Timeline login={this.props.match.params.login} store={this.context.store}/>
+                    <Header/>
+                    <Timeline login={this.props.match.params.login}/>
                 </div>
             </div>
         );

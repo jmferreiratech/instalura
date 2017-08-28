@@ -1,22 +1,17 @@
 import React, {Component} from 'react';
 import TimelineApi from "../logicas/TimelineApi";
+import {connect} from "react-redux";
 
 class Header extends Component {
 
     constructor() {
         super();
-        this.state = {msg: ''};
-    }
-
-    componentDidMount() {
-        this.props.store.subscribe(() => {
-            this.setState({msg: this.props.store.getState().header});
-        })
+        this.pesquisa = this.pesquisa.bind(this);
     }
 
     pesquisa(event) {
         event.preventDefault();
-        this.props.store.dispatch(TimelineApi.seach(this.loginPesquisado.value));
+        this.props.search(this.loginPesquisado.value);
     }
 
     render() {
@@ -34,7 +29,7 @@ class Header extends Component {
                 <nav>
                     <ul className="header-nav">
                         <li className="header-nav-item">
-                            <span>{this.state.msg}</span>
+                            <span>{this.props.msg}</span>
                             <a href="#">
                                 ♡
                                 {/*                 ♥ */}
@@ -48,4 +43,14 @@ class Header extends Component {
     }
 }
 
-export default Header;
+const mapStateToProps = state => {
+    return {msg: state.header};
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        search: loginTyped => dispatch(TimelineApi.seach(loginTyped)),
+    };
+};
+const HeaderContainer = connect(mapStateToProps, mapDispatchToProps)(Header);
+
+export default HeaderContainer;
