@@ -54,6 +54,18 @@ class TimelineApi {
                 });
         };
     }
+
+    static seach(loginTyped) {
+        return dispatch => {
+            fetch(`http://localhost:8080/api/public/fotos/${loginTyped}`)
+                .then(response => response.json())
+                .then(fotos => {
+                    dispatch(Actions.alert(fotos.length === 0 ? "Usuário não encontrado" : ""));
+                    dispatch(Actions.listing(fotos));
+                    return fotos;
+                });
+        }
+    }
 }
 
 export default TimelineApi;

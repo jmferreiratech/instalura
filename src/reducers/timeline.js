@@ -37,6 +37,10 @@ export class Actions {
     static like(fotoId, liker) {
         return {type: 'LIKE', liker, fotoId};
     }
+
+    static alert(msg) {
+        return {type: 'ALERT', msg};
+    }
 }
 
 function upToDateState(currentState, element, update) {

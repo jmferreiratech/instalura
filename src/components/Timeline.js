@@ -12,7 +12,7 @@ class Timeline extends Component {
     }
 
     componentWillMount() {
-        this.props.store.subscribe(() => this.setState({fotos: this.props.store.getState()}));
+        this.props.store.subscribe(() => this.setState({fotos: this.props.store.getState().timeline}));
     }
 
     componentDidMount() {
